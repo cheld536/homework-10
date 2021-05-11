@@ -248,12 +248,12 @@ int insert(Node* head, int key)
 }
 
 
-int deleteLeafNode(Node* head, int key)
+int deleteNode(Node* head, int key)
 {
 	Node* target = head->left;								// 탐색 노드를 선언하고 루트 노드의 주소값으로 초기화 해준다.
 	Node* parents = NULL;									// 부모 노드
 	Node* remove = NULL;									// 삭제할 노드
-	Node* temp = NULL;										// 임시로 저장하는 노드
+	Node* tempnode = NULL;										// 임시로 저장하는 노드
 	Node* small = NULL;										// 오른쪽 서브트리의 최소값을 가진 노드를 저장할 노드
 
 	int temp;
@@ -361,26 +361,67 @@ int deleteLeafNode(Node* head, int key)
 
 	if(target->left != NULL || target->right != NULL)			// 제거하고자 하는 노드가 자식이 양쪽에 있을때. 단말 노드가 2개
 	{
-		Node* temp_parents = NULL;												// 제일 작은 노드의 부모노드를 저장하는 노드
+		Node* s_parents = NULL;												// 제일 작은 노드의 부모노드를 저장하는 노드
 		small = remove->right;													// 삭제할 노드의 오른쪽에 있는 노드를 저장
 
 		while(small->left!=NULL)
 		{
-			temp_parents = small;
+			s_parents = small;
 			small = small->left;
 		}
 		if(parents == NULL)											// 루트노드를 삭제할때
 		{
-			
+			if(small->left == NULL && small->right == NULL)
+			{
+				if(s_parents != NULL)
+					s_parents->left = NULL;
+			}
+			else{
+				if(s_parents != NULL)
+					s_parents->left = small->right;
+			}
+			head->left = small;
 		}
-		else{
+		else
+		{													// 루트 노드가 아닐때
 			if(parents->key > remove->key)
 			{
 				parents->left = small;
 			}
+			else{
+				parents->right = small;
+			}
+
+			if(small->left == NULL && small->right == NULL)
+			{
+				if(s_parents != NULL)
+					s_parents->left = NULL;
+
+			}
+			else
+			{
+				if(s_parents != NULL)
+				{
+					s_parents->left = small->right;
+				}
+			}	
 		}
 
+		if(small != remove->left)
+		{
+			small->left = remove->left;
+		}
 
+		if(small != remove->right)
+		{
+			small->right = remove->right;
+			
+		}
+		remove->left =NULL;
+		remove->right= NULL;
+		free(remove);	
+
+		return 0;
 	}
 	
 }
