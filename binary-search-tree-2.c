@@ -248,161 +248,142 @@ int insert(Node* head, int key)
 }
 
 
-int deleteNode(Node* head, int key)
+int deleteLeafNode(Node* head, int key)
 {
-	Node* ptr=head->left;                    //루트노드를 가리킨다
-	Node* previous=NULL;                    //삭제후 이전노드를 NULL로 초기화 해주기 위해서 선언
-	Node* find=NULL;                        //자식노드가2개인 노드에서 오른쪽에서 가장작은값 혹은 왼쪽에서 가장큰 노드의 값을 찾기위한 노드
-	Node* check=NULL;
-	Node* fprevious=NULL;                  //find의 이전노드를 찾기 위한 변수 선언
-	while (ptr)                               //노드가 NULL일때 까지
+	Node* target = head->left;								// 탐색 노드를 선언하고 루트 노드의 주소값으로 초기화 해준다.
+	Node* parents = NULL;									// 부모 노드
+	Node* remove = NULL;									// 삭제할 노드
+	Node* temp = NULL;										// 임시로 저장하는 노드
+	Node* small = NULL;										// 오른쪽 서브트리의 최소값을 가진 노드를 저장할 노드
+
+	int temp;
+	while (target != NULL)
 	{
-		if(ptr->key==key)                      //해당노드가 key값이랑 일치하면
+		if(target->key == key)
 		{
-
-			//자식이 0명인 단말노드일때
-			if(ptr->left==NULL&&ptr->right==NULL)   //해당노드가 왼쪽과 오른쪽이 없다->단말노드인지 확인을하고
-			{
-				if(previous==NULL)                 //루트노드를 삭제할경우
-				{
-					free(ptr);                     //삭제후
-					head->left=NULL;               //헤드노드 왼쪽 초기화
-					break;
-				}
-
-				                                    //단말노드로 올때 이전노드에서 왼쪽에서 온지 오른쪽에서 온지 확인
-				if(previous->left!=NULL)            //왼쪽 노드가 널이면 발생하는 예외처리
-				{
-				  if(previous->left->key==key)       //왼쪽으로 해당 왼쪽노드의 key값이 같으면
-				  {
-					free(ptr);                        //동적할당해제->삭제
-					previous->left=NULL;              //삭제후 이전노드가 가리키는곳을 NULL로 초기화
-				  }
-				}
-				if(previous->right!=NULL)         //오른쪽 노드가 널이면 발생하는 예외처리
-				{
-				 if(previous->right->key==key)    //그 오른쪽의 key값이 일치하면
-				 {
-					free(ptr);                    //동적할당해제->삭제
-					previous->right=NULL;         //삭제후 이전노드가 가리키는곳을 NULL로 초기화
-				 }
-				}
-				break;                          //key값과 일치하는 노드를 삭제후 while문을 나감
-			}
-			//자식이 1명인 비리프노드일때(왼쪽이 자식일때)
-			if(ptr->left!=NULL&&ptr->right==NULL)
-			{
-				if (previous == NULL)                 //루트노드를 삭제할경우
-				{
-					head->left = ptr->left;           //루트노드를 삭제할 노드가 가지고 있는 자식노드로 변경
-					free(ptr);                        //삭제
-					break;
-				}
-				                                    //단말노드로 올때 이전노드에서 왼쪽에서 온지 오른쪽에서 온지 확인
-				if(previous->left!=NULL)            //왼쪽 노드가 널이면 발생하는 예외처리
-				{
-				  if(previous->left->key==key)       //왼쪽으로 해당 왼쪽노드의 key값이 같으면
-				  {
-					previous->left=ptr->left;         //ptr에 연결된 하나의 자식을 이전노드에 연결
-					free(ptr);                        //동적할당해제->삭제
-				  }
-				}
-				if(previous->right!=NULL)         //오른쪽 노드가 널이면 발생하는 예외처리
-				{
-				 if(previous->right->key==key)    //그 오른쪽의 key값이 일치하면
-				 {
-					previous->right=ptr->left;         //ptr에 연결된 하나의 자식을 이전노드에 연결
-					free(ptr);                    //동적할당해제->삭제
-				 }
-				}
-				break;                          //key값과 일치하는 노드를 삭제후 while문을 나감
-
-			}
-			//자식이 1명인 비리프노드일때(오른쪽이 자식일때)
-			if(ptr->left==NULL&&ptr->right!=NULL)
-			{
-				if (previous == NULL)                 //루트노드를 삭제할경우
-				{
-					head->left = ptr->right;          //루트노드를 삭제할 노드가 가지고 있는 자식노드로 변경
-					free(ptr);                        //삭제
-					break;
-				}
-				                                    //단말노드로 올때 이전노드에서 왼쪽에서 온지 오른쪽에서 온지 확인
-				if(previous->left!=NULL)            //왼쪽 노드가 널이면 발생하는 예외처리
-				{
-				  if(previous->left->key==key)       //왼쪽으로 해당 왼쪽노드의 key값이 같으면
-				  {
-					previous->left=ptr->right;         //ptr에 연결된 하나의 자식을 이전노드에 연결
-					free(ptr);                        //동적할당해제->삭제
-				  }
-				}
-				if(previous->right!=NULL)         //오른쪽 노드가 널이면 발생하는 예외처리
-				{
-				 if(previous->right->key==key)    //그 오른쪽의 key값이 일치하면
-				 {
-					previous->right=ptr->right;         //ptr에 연결된 하나의 자식을 이전노드에 연결
-					free(ptr);                    //동적할당해제->삭제
-				 }
-				}
-				break;                          //key값과 일치하는 노드를 삭제후 while문을 나감
-
-			}
-			//자식이 2명인 비리프노드일때
-			if(ptr->left!=NULL&&ptr->right!=NULL)
-			{
-				//오른쪽에서 가장 작은 노드를 찾아서 삭제할 노드에 대입(찾는 노드는 삭제)하는 방법
-				previous=ptr;                      //오른쪽으로 한번 가기때문에 이전노드를 저장
-				check=ptr->right;                  //오른쪽 노드부터 체크
-				find=check;                      //오른쪽 서브트리에 왼쪽노드가 없으면 서브트리의 루트가 가장 작은노드
-				while(check->right||check->left) //삭제할노드의 오른쪽 서브트리에서 가장 작은값을 찾는다.
-				{
-					if(check->left)            //왼쪽이 있으면 무조건 왼쪽이 작다
-					{
-					fprevious=check;          //이전 노드를 저장
-					find=check->left;
-					}
-					else                      //왼쪽이 없으면 오른쪽으로 탐색
-					check=check->right;
-
-				}
-				//가장작은 노드의 오른쪽에 노드가 있을때
-				if(fprevious!=NULL)         //find노드가 적어도 한번 왼쪽으로 갔을때
-				{
-				 if(find->right!=NULL)
-				 {                          //그냥 삭제하게 되면 해당 find->right의 노드를 찾을수 없게된다.
-					fprevious->left=find->right;            
-				 }
-				 //가장작은노드가 단말노드일때
-				 else
-				 {
-				  fprevious->left=NULL;       //가장작은노드를 삭제하기전 해당노드를 가리키는 이전노드의 링크를 NULL로 초기화
-				 }
-				 ptr->key=find->key;        //가장작은노드의 key를 삭제할 노드에 대입
-				 free(find);                      //삭제할 노드 동적할당해제
-				 break;                          //key값과 일치하는 노드를 삭제후 while문을 나감
-				}
-				else   //오른쪽 서브트리에서 왼쪽으로 한번도 가지 않았을때
-				{
-					previous->key=find->key;
-					previous->right=find->right;
-					free(find);
-					break;
-				}
-			}
+			break;
 		}
-		if(ptr->key<key)                           //key값이 현재 노드보다 크면
+		
+		parents = target;	// 찾고 있는 노드의 부모노드의 주소를 저장
+
+		if(key < target->key)	// 키 값 보다 타겟 값이 크면  왼쪽으로 오른 쪽
 		{
-			previous=ptr;                          //이전노드를 확인하기 위해 대입하고
-			ptr=ptr->right;                        //오른쪽으로 이동
+			target = target->left;
 		}
-		else                                      //key값이 현재 노드보다 작으면
+		else if ( key > target->key)		// 키값이 타겟 값보다 크면 오른쪽으로 이동
 		{
-			previous=ptr;                         //이전노드를 확인하기 위해 대입하고
-		    ptr=ptr->left;                         //왼쪽으로 이동
+			target = target->right;
+		}
+	
+	}
+
+	remove = target; 											// 삭제할 노드의 주소를 저장
+
+	if(!remove)													// 삭제할 노드가 없으면 0으로 반환
+		return 0;
+
+//자식이 없는 단일 노드 일때
+
+	if(target->left == NULL && target->right == NULL)				
+	{
+		if(parents == NULL)										// 루트 노드를 지울때
+		{
+			head->left =NULL;									// 해드의 왼쪽을 널로 초기화
+			free(remove);										// 삭제한다
+			return 0;
+		}
+
+		if(target->key == parents->left->key)					// 찾는 노드가 부모의 왼쪽 자식이면
+		{
+			parents->left = NULL;								// 부모의 왼쪽을 널로 하고
+			free(remove);										// 삭제
+		}	
+		else if(target->key == parents->right->key){			// 찾는 노드가 부모의 오른쪽 자식이면
+			parents->right = NULL;								// 부모의 오른쪽을 널로 하고 
+			free(remove);										// 삭제
+		}
+		return 0;
+	}
+	
+	// 자식노드가 양쪽중 하나만 있을 때 (왼쪽)
+
+	if(remove->left != NULL&& remove->right ==NULL)					// 왼쪽노드에 자식이 있을때
+	{
+		if (parents == NULL)                 				//루트노드를 삭제할경우
+		{
+			head->left = remove->left;           		//루트노드를 삭제할 노드가 가지고 있는 왼쪽 자식노드로 변경
+			remove->left = NULL;
+			free(remove);                        		//삭제
+			return 1;
+		}
+		if(remove->left != NULL)						
+		{
+			if(parents->key > remove->key)					// 부모노드 값이 삭제할 노드 값보다 클 때
+			{
+				parents->left = remove->left;				// 부모의 왼쪽을 삭제 하는 노드의 왼쪽 노드를 위시 시킨다
+			}
+			else{											// 그 외 의 경우
+				parents->right = remove ->left ;			// 부모의 오른쪽에 삭제할 노드의 왼족 노드를 위치 시킨다.
+			}
+			remove->left = NULL;							// 삭제할 노드의 왼쪽을 널로 만든다.
+			free(remove);									// 삭제
+			return 1;
 		}
 	}
-}
 
+// 자식노드가 양쪽중 하나만 있을 때 (오른쪽)
+
+	if(remove->left == NULL && remove->right != NULL)				// 오른쪽에 자식이 있을때
+	{
+		if (parents == NULL)                 				//루트노드를 삭제할경우
+		{
+			head->left = remove->right;           		//루트노드를 삭제할 노드가 가지고 있는 오른쪽 자식노드로 변경
+			remove->right = NULL;
+			free(remove);                        		//삭제
+			return 1;
+		}
+		if(remove->right != NULL)
+		{
+			if(parents->key > remove->key)				// 부모의 노드 값이 삭제할 노드 값보다 클경우
+			{
+				parents->left = remove->right;			// 부모노드의 왼쪽에 삭제할 노드의 오른쪽 노드를 위치 시킨다.
+			}
+			else										// 그 외의 경우
+			{
+				parents->right = remove->right;			// 부모노드의 오른쪽에 삭제할 노드의 오른쪽 노드를 위치 시킨다.
+			}
+			remove->right = NULL;						// 삭제할 노드의 오른쪽을 널로 만든다.
+			free(remove);								// 삭제
+			return 1;
+		}
+
+	}
+
+	if(target->left != NULL || target->right != NULL)			// 제거하고자 하는 노드가 자식이 양쪽에 있을때. 단말 노드가 2개
+	{
+		Node* temp_parents = NULL;												// 제일 작은 노드의 부모노드를 저장하는 노드
+		small = remove->right;													// 삭제할 노드의 오른쪽에 있는 노드를 저장
+
+		while(small->left!=NULL)
+		{
+			temp_parents = small;
+			small = small->left;
+		}
+		if(parents == NULL)											// 루트노드를 삭제할때
+		{
+			
+		}
+		else{
+			if(parents->key > remove->key)
+			{
+				parents->left = small;
+			}
+		}
+
+
+	}
+	
+}
 
 void freeNode(Node* ptr)
 {
