@@ -371,55 +371,55 @@ int deleteNode(Node* head, int key)
 		}
 		if(parents == NULL)											// 루트노드를 삭제할때
 		{
-			if(small->left == NULL && small->right == NULL)
+			if(small->left == NULL && small->right == NULL)			// 만약 small 노드의 자식들이 없을 경우
 			{
-				if(s_parents != NULL)
-					s_parents->left = NULL;
+				if(s_parents != NULL)								// small의 부모가 존재하면
+					s_parents->left = NULL;							// small노드의 부모를 널로 초기화
 			}
-			else{
-				if(s_parents != NULL)
-					s_parents->left = small->right;
+			else{													// small 노드의 자식들이 존재하는 경우
+				if(s_parents != NULL)								// 부모가 존재하면
+					s_parents->left = small->right;					// 오른쪽 서브트리의 최소값 따라서 small의 부모 왼쪽에 small의 오른쪽 자식이 들어간다.
 			}
-			head->left = small;
+			head->left = small;										// small을 루트 노드로 만든다.
 		}
 		else
 		{													// 루트 노드가 아닐때
-			if(parents->key > remove->key)
+			if(parents->key > remove->key)					// 부모의 값이 삭제할 값보다 클 경우
 			{
-				parents->left = small;
+				parents->left = small;						// 부모의 왼쪽은 small을 가르킴
 			}
-			else{
-				parents->right = small;
+			else{											// 그외의 경우
+				parents->right = small;						// 부모의 오른쪽에 small이 위치
 			}
 
-			if(small->left == NULL && small->right == NULL)
+			if(small->left == NULL && small->right == NULL)	// small의 자식노드가 없을떄	
 			{
-				if(s_parents != NULL)
-					s_parents->left = NULL;
+				if(s_parents != NULL)						// small의 부모가 존재하면
+					s_parents->left = NULL;					// small의 부모의 왼쪽을 널로 초기화
 
 			}
-			else
+			else											// small에 자식노드가 존재하면
 			{
-				if(s_parents != NULL)
+				if(s_parents != NULL)						// small에 부모노드가 존재하면
 				{
-					s_parents->left = small->right;
+					s_parents->left = small->right;			// small의 부모노드의 왼쪽에 small 노드의 오른쪽 노드가 위치하도록 한다.
 				}
 			}	
 		}
 
-		if(small != remove->left)
+		if(small != remove->left)							// 만약 삭제할 노드의 왼쪽에 small이 위치 하지 않으면
 		{
-			small->left = remove->left;
+			small->left = remove->left;						// small의 왼쪽이 삭제할 노드의 왼쪽 노드를 가르킨다. 
 		}
 
-		if(small != remove->right)
+		if(small != remove->right)							// 만약 small 노드가 remove 노드의 오른쪽에 위치하지 않으면
 		{
-			small->right = remove->right;
+			small->right = remove->right;					// small의 오른쪽을 remove노드의 오른쪽 노드가 가르키는 주소값을저장
 			
 		}
-		remove->left =NULL;
+		remove->left =NULL;									// 삭제할 노드의 오른쪽 왼쪽을 초기화
 		remove->right= NULL;
-		free(remove);	
+		free(remove);										// 삭제
 
 		return 0;
 	}
