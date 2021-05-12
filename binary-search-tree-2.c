@@ -49,10 +49,7 @@ int freeBST(Node* head); /* free all memories allocated to the tree */
 /* you may add your own defined functions if necessary */
 
 
-void printStack()
-{
-
-}
+void printStack();
 
 
 
