@@ -14,8 +14,8 @@
 
 typedef struct node {
 	int key;
-	struct node *left;
-	struct node *right;
+	struct node* left;
+	struct node* right;
 } Node;
 
 /* for stack1*/
@@ -49,7 +49,7 @@ int freeBST(Node* head); /* free all memories allocated to the tree */
 /* you may add your own defined functions if necessary */
 
 
-void printStack();
+
 
 
 
@@ -58,7 +58,7 @@ int main()
 	char command;
 	int key;
 	Node* head = NULL;
-	do{
+	do {
 		printf("\n\n");
 		printf("----------------------------------------------------------------\n");
 		printf("                   Binary Search Tree #2                        \n");
@@ -74,7 +74,7 @@ int main()
 		printf("Command = ");
 		scanf(" %c", &command);
 
-		switch(command) {
+		switch (command) {
 		case 'z': case 'Z':
 			initializeBST(&head);
 			break;
@@ -102,17 +102,12 @@ int main()
 		case 'l': case 'L':
 			levelOrder(head->left);
 			break;
-
-		case 'p': case 'P':
-			printStack();
-			break;
-
 		default:
 			printf("\n       >>>>>   Concentration!!   <<<<<     \n");
 			break;
 		}
 
-	}while(command != 'q' && command != 'Q');
+	} while (command != 'q' && command != 'Q');
 
 	return 1;
 }
@@ -120,7 +115,7 @@ int main()
 int initializeBST(Node** h) {
 
 	/* if the tree is not empty, then remove all allocated nodes from the tree*/
-	if(*h != NULL)
+	if (*h != NULL)
 		freeBST(*h);
 
 	/* create a head node */
@@ -140,7 +135,7 @@ int initializeBST(Node** h) {
 
 void recursiveInorder(Node* ptr)
 {
-	if(ptr) {
+	if (ptr) {
 		recursiveInorder(ptr->left);
 		printf(" [%d] ", ptr->key);
 		recursiveInorder(ptr->right);
@@ -150,21 +145,21 @@ void recursiveInorder(Node* ptr)
 /**
  * textbook: p 224s 강의자료 32페이지를 참고하였습니다.
  */
-// 반복적 중위 순회 
+ // 반복적 중위 순회 
 void iterativeInorder(Node* node)
 {
-	top =-1;  // 스택의 초기화
-	for(;;)
+	top = -1;  // 스택의 초기화
+	for (;;)
 	{
-		for(;node; node = node->left)  // 노드가 널이 아닐때까지 왼쪽 노드 탐색
+		for (; node; node = node->left)  // 노드가 널이 아닐때까지 왼쪽 노드 탐색
 		{
 			push(node); // 스택에 삽입
 		}
 		node = pop(); // 스텍에서 삭제
-		if(!node) break; // 공백 스택이면 반복문을 종료한다.
+		if (!node) break; // 공백 스택이면 반복문을 종료한다.
 
 		printf(" [%d] ", node->key);		// 키를 출력
-		node = node ->right ;  			// 노드의 오른쪽으로 탐색
+		node = node->right;  			// 노드의 오른쪽으로 탐색
 	}
 
 }
@@ -176,27 +171,27 @@ void levelOrder(Node* ptr)
 {
 	enQueue(ptr);		//큐에 루트노드를 하나 넣어놓음
 
-	
-	for(;;)
+
+	for (;;)
 	{
 		ptr = deQueue();	// 큐에 삽입된 노드의 주소를 전달
 
-		if(ptr)									// 루트 노드가 널이 아니면
+		if (ptr)									// 루트 노드가 널이 아니면
 		{
-			printf(" [%d] ",ptr->key);		
-			if(ptr->left)			 			// 왼쪽 자식 노드가 있으면 
+			printf(" [%d] ", ptr->key);
+			if (ptr->left)			 			// 왼쪽 자식 노드가 있으면 
 			{
 				enQueue(ptr->left);				// 큐에 왼쪽 자식 노드 저장
 			}
-			if(ptr->right)						// 오른쪽 자식 노드가 있으면
+			if (ptr->right)						// 오른쪽 자식 노드가 있으면
 			{
 				enQueue(ptr->right);			// 큐에 오른쪽 자식 노드 저장
 
 			}
 		}
-		else if(!ptr)	// 노드가 널이면 반복문을 탈출한다.
+		else if (!ptr)	// 노드가 널이면 반복문을 탈출한다.
 			break;
-		
+
 	}
 }
 
@@ -217,10 +212,10 @@ int insert(Node* head, int key)
 	Node* ptr = head->left;
 
 	Node* parentNode = NULL;
-	while(ptr != NULL) {
+	while (ptr != NULL) {
 
 		/* if there is a node for the key, then just return */
-		if(ptr->key == key) return 1;
+		if (ptr->key == key) return 1;
 
 		/* we have to move onto children nodes,
 		 * keep tracking the parent using parentNode */
@@ -230,14 +225,14 @@ int insert(Node* head, int key)
 		 * then the new node has to be inserted into the right subtree;
 		 * otherwise the left subtree.
 		 */
-		if(ptr->key < key)
+		if (ptr->key < key)
 			ptr = ptr->right;
 		else
 			ptr = ptr->left;
 	}
 
 	/* linking the new node to the parent */
-	if(parentNode->key > key)
+	if (parentNode->key > key)
 		parentNode->left = newNode;
 	else
 		parentNode->right = newNode;
@@ -256,55 +251,55 @@ int deleteNode(Node* head, int key)
 	int temp;
 	while (target != NULL)
 	{
-		if(target->key == key)
+		if (target->key == key)
 		{
 			break;
 		}
-		
+
 		parents = target;	// 찾고 있는 노드의 부모노드의 주소를 저장
 
-		if(key < target->key)	// 키 값 보다 타겟 값이 크면  왼쪽으로 오른 쪽
+		if (key < target->key)	// 키 값 보다 타겟 값이 크면  왼쪽으로 오른 쪽
 		{
 			target = target->left;
 		}
-		else if ( key > target->key)		// 키값이 타겟 값보다 크면 오른쪽으로 이동
+		else if (key > target->key)		// 키값이 타겟 값보다 크면 오른쪽으로 이동
 		{
 			target = target->right;
 		}
-	
+
 	}
 
 	remove = target; 											// 삭제할 노드의 주소를 저장
 
-	if(!remove)													// 삭제할 노드가 없으면 0으로 반환
+	if (!remove)													// 삭제할 노드가 없으면 0으로 반환
 		return 0;
 
-//자식이 없는 단일 노드 일때
+	//자식이 없는 단일 노드 일때
 
-	if(target->left == NULL && target->right == NULL)				
+	if (target->left == NULL && target->right == NULL)
 	{
-		if(parents == NULL)										// 루트 노드를 지울때
+		if (parents == NULL)										// 루트 노드를 지울때
 		{
-			head->left =NULL;									// 해드의 왼쪽을 널로 초기화
+			head->left = NULL;									// 해드의 왼쪽을 널로 초기화
 			free(remove);										// 삭제한다
 			return 0;
 		}
 
-		if(target->key == parents->left->key)					// 찾는 노드가 부모의 왼쪽 자식이면
+		if (target->key == parents->left->key)					// 찾는 노드가 부모의 왼쪽 자식이면
 		{
 			parents->left = NULL;								// 부모의 왼쪽을 널로 하고
 			free(remove);										// 삭제
-		}	
-		else if(target->key == parents->right->key){			// 찾는 노드가 부모의 오른쪽 자식이면
+		}
+		else if (target->key == parents->right->key) {			// 찾는 노드가 부모의 오른쪽 자식이면
 			parents->right = NULL;								// 부모의 오른쪽을 널로 하고 
 			free(remove);										// 삭제
 		}
 		return 0;
 	}
-	
+
 	// 자식노드가 양쪽중 하나만 있을 때 (왼쪽)
 
-	if(remove->left != NULL&& remove->right ==NULL)					// 왼쪽노드에 자식이 있을때
+	if (remove->left != NULL && remove->right == NULL)					// 왼쪽노드에 자식이 있을때
 	{
 		if (parents == NULL)                 				//루트노드를 삭제할경우
 		{
@@ -313,14 +308,14 @@ int deleteNode(Node* head, int key)
 			free(remove);                        		//삭제
 			return 1;
 		}
-		if(remove->left != NULL)						
+		if (remove->left != NULL)
 		{
-			if(parents->key > remove->key)					// 부모노드 값이 삭제할 노드 값보다 클 때
+			if (parents->key > remove->key)					// 부모노드 값이 삭제할 노드 값보다 클 때
 			{
 				parents->left = remove->left;				// 부모의 왼쪽을 삭제 하는 노드의 왼쪽 노드를 위시 시킨다
 			}
-			else{											// 그 외 의 경우
-				parents->right = remove ->left ;			// 부모의 오른쪽에 삭제할 노드의 왼족 노드를 위치 시킨다.
+			else {											// 그 외 의 경우
+				parents->right = remove->left;			// 부모의 오른쪽에 삭제할 노드의 왼족 노드를 위치 시킨다.
 			}
 			remove->left = NULL;							// 삭제할 노드의 왼쪽을 널로 만든다.
 			free(remove);									// 삭제
@@ -328,9 +323,9 @@ int deleteNode(Node* head, int key)
 		}
 	}
 
-// 자식노드가 양쪽중 하나만 있을 때 (오른쪽)
+	// 자식노드가 양쪽중 하나만 있을 때 (오른쪽)
 
-	if(remove->left == NULL && remove->right != NULL)				// 오른쪽에 자식이 있을때
+	if (remove->left == NULL && remove->right != NULL)				// 오른쪽에 자식이 있을때
 	{
 		if (parents == NULL)                 				//루트노드를 삭제할경우
 		{
@@ -339,9 +334,9 @@ int deleteNode(Node* head, int key)
 			free(remove);                        		//삭제
 			return 1;
 		}
-		if(remove->right != NULL)
+		if (remove->right != NULL)
 		{
-			if(parents->key > remove->key)				// 부모의 노드 값이 삭제할 노드 값보다 클경우
+			if (parents->key > remove->key)				// 부모의 노드 값이 삭제할 노드 값보다 클경우
 			{
 				parents->left = remove->right;			// 부모노드의 왼쪽에 삭제할 노드의 오른쪽 노드를 위치 시킨다.
 			}
@@ -356,76 +351,76 @@ int deleteNode(Node* head, int key)
 
 	}
 
-	if(target->left != NULL || target->right != NULL)			// 제거하고자 하는 노드가 자식이 양쪽에 있을때. 단말 노드가 2개
+	if (target->left != NULL || target->right != NULL)			// 제거하고자 하는 노드가 자식이 양쪽에 있을때. 단말 노드가 2개
 	{
 		Node* s_parents = NULL;												// 제일 작은 노드의 부모노드를 저장하는 노드
 		small = remove->right;													// 삭제할 노드의 오른쪽에 있는 노드를 저장
 
-		while(small->left!=NULL)
+		while (small->left != NULL)
 		{
 			s_parents = small;
 			small = small->left;
 		}
-		if(parents == NULL)											// 루트노드를 삭제할때
+		if (parents == NULL)											// 루트노드를 삭제할때
 		{
-			if(small->left == NULL && small->right == NULL)			// 만약 small 노드의 자식들이 없을 경우
+			if (small->left == NULL && small->right == NULL)			// 만약 small 노드의 자식들이 없을 경우
 			{
-				if(s_parents != NULL)								// small의 부모가 존재하면
+				if (s_parents != NULL)								// small의 부모가 존재하면
 					s_parents->left = NULL;							// small노드의 부모를 널로 초기화
 			}
-			else{													// small 노드의 자식들이 존재하는 경우
-				if(s_parents != NULL)								// 부모가 존재하면
+			else {													// small 노드의 자식들이 존재하는 경우
+				if (s_parents != NULL)								// 부모가 존재하면
 					s_parents->left = small->right;					// 오른쪽 서브트리의 최소값 따라서 small의 부모 왼쪽에 small의 오른쪽 자식이 들어간다.
 			}
 			head->left = small;										// small을 루트 노드로 만든다.
 		}
 		else
 		{													// 루트 노드가 아닐때
-			if(parents->key > remove->key)					// 부모의 값이 삭제할 값보다 클 경우
+			if (parents->key > remove->key)					// 부모의 값이 삭제할 값보다 클 경우
 			{
 				parents->left = small;						// 부모의 왼쪽은 small을 가르킴
 			}
-			else{											// 그외의 경우
+			else {											// 그외의 경우
 				parents->right = small;						// 부모의 오른쪽에 small이 위치
 			}
 
-			if(small->left == NULL && small->right == NULL)	// small의 자식노드가 없을떄	
+			if (small->left == NULL && small->right == NULL)	// small의 자식노드가 없을떄	
 			{
-				if(s_parents != NULL)						// small의 부모가 존재하면
+				if (s_parents != NULL)						// small의 부모가 존재하면
 					s_parents->left = NULL;					// small의 부모의 왼쪽을 널로 초기화
 
 			}
 			else											// small에 자식노드가 존재하면
 			{
-				if(s_parents != NULL)						// small에 부모노드가 존재하면
+				if (s_parents != NULL)						// small에 부모노드가 존재하면
 				{
 					s_parents->left = small->right;			// small의 부모노드의 왼쪽에 small 노드의 오른쪽 노드가 위치하도록 한다.
 				}
-			}	
+			}
 		}
 
-		if(small != remove->left)							// 만약 삭제할 노드의 왼쪽에 small이 위치 하지 않으면
+		if (small != remove->left)							// 만약 삭제할 노드의 왼쪽에 small이 위치 하지 않으면
 		{
 			small->left = remove->left;						// small의 왼쪽이 삭제할 노드의 왼쪽 노드를 가르킨다. 
 		}
 
-		if(small != remove->right)							// 만약 small 노드가 remove 노드의 오른쪽에 위치하지 않으면
+		if (small != remove->right)							// 만약 small 노드가 remove 노드의 오른쪽에 위치하지 않으면
 		{
 			small->right = remove->right;					// small의 오른쪽을 remove노드의 오른쪽 노드가 가르키는 주소값을저장
-			
+
 		}
-		remove->left =NULL;									// 삭제할 노드의 오른쪽 왼쪽을 초기화
-		remove->right= NULL;
+		remove->left = NULL;									// 삭제할 노드의 오른쪽 왼쪽을 초기화
+		remove->right = NULL;
 		free(remove);										// 삭제
 
 		return 0;
 	}
-	
+
 }
 
 void freeNode(Node* ptr)
 {
-	if(ptr) {
+	if (ptr) {
 		freeNode(ptr->left);
 		freeNode(ptr->right);
 		free(ptr);
@@ -435,7 +430,7 @@ void freeNode(Node* ptr)
 int freeBST(Node* head)
 {
 
-	if(head->left == head)
+	if (head->left == head)
 	{
 		free(head);
 		return 1;
@@ -461,7 +456,7 @@ Node* pop()
 
 void push(Node* aNode)
 {
-	if(top<(MAX_STACK_SIZE - 1))				// top이 스택 배열의 최대 크기 전까지 저장
+	if (top < (MAX_STACK_SIZE - 1))				// top이 스택 배열의 최대 크기 전까지 저장
 	{
 		stack[++top] = aNode;
 	}
@@ -473,7 +468,7 @@ void push(Node* aNode)
 Node* deQueue()
 {
 
-	if(rear == front) 		// rear 과 front가 같으면 큐가 비었다는 뜻임으로
+	if (rear == front) 		// rear 과 front가 같으면 큐가 비었다는 뜻임으로
 	{
 		return NULL;		// 널값을 반환
 	}
@@ -484,12 +479,12 @@ Node* deQueue()
 /* 원형 큐의 rear에 원소를 삽입하는 함수*/
 void enQueue(Node* aNode)
 {
-	if(rear>= MAX_QUEUE_SIZE - 1) //  만약 배열의 크기가 넘어가면 오류가 발생
+	if (rear >= MAX_QUEUE_SIZE - 1) //  만약 배열의 크기가 넘어가면 오류가 발생
 	{
 		printf("큐가 꽉 찼습니다\n");
 		return;
 	}
 	else						//  배열의 크기가 넘지 않았다면 데이터를 저장한다.
-		queue[++rear]=aNode;
+		queue[++rear] = aNode;
 }
 
