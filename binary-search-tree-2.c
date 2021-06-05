@@ -18,7 +18,7 @@ typedef struct node {
 	struct node *right;
 } Node;
 
-/* for stack */
+/* for stack1*/
 #define MAX_STACK_SIZE		20
 Node* stack[MAX_STACK_SIZE];
 int top = -1;
